@@ -1,7 +1,0 @@
-package org.movie.search.services;
-
-import org.springframework.stereotype.Service;
-
-@Service
-public class OMDBServices {
-}
