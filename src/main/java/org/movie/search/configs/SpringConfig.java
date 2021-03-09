@@ -1,7 +1,9 @@
-package org.movie.search;
+package org.movie.search.configs;
 
 import org.movie.search.converters.JSONObjectToMovieConverter;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.FormatterRegistry;
@@ -23,6 +25,7 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableWebMvc
 @EnableAsync
+@ComponentScan("org.movie.search")
 public class SpringConfig implements WebMvcConfigurer {
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

@@ -1,5 +1,8 @@
 package org.movie.search.controller;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.movie.search.model.Movie;
 import org.movie.search.model.MovieToWordDownloader;
 import org.movie.search.services.OMDBService;
@@ -22,6 +25,8 @@ public class MovieSearchController {
     OMDBService omdbService;
     Executor executor;
     MovieToWordDownloader downloader;
+    private Logger logger = LogManager.getLogger(MovieSearchController.class);
+
 
     @Autowired
     public MovieSearchController(OMDBService omdbService, Executor executor, MovieToWordDownloader downloader){
@@ -33,6 +38,7 @@ public class MovieSearchController {
     @GetMapping(value = "/movie_search", params = {"title"})
     public List<Movie> searchMovieTitle(@RequestParam(value = "title", required = false) String[] titles,
                                         @RequestParam(value = "d", defaultValue = "false") boolean d) throws IOException {
+
         List<Movie> movies = new LinkedList<>();
         List<CompletableFuture<Movie>> list = new LinkedList<>();
 
@@ -43,6 +49,8 @@ public class MovieSearchController {
         list.forEach(m -> {
             try {
                 movies.add(m.get());
+                logger.info("test message");
+                logger.warn("test warn message");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
