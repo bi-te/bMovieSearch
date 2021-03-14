@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
@@ -29,16 +29,19 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 @Configuration
-@EnableWebMvc
 @EnableAsync
 @ComponentScan("org.movie.search")
 @EnableCaching
 @EnableScheduling
-public class SpringConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(true);
+    }
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorParameter(false).
-                parameterName("mediaType").
+        configurer.favorPathExtension(true).
+                favorParameter(false).
                 ignoreAcceptHeader(true).
                 defaultContentType(MediaType.APPLICATION_JSON).
                 mediaType("xml", MediaType.APPLICATION_XML).
