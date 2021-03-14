@@ -8,14 +8,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class OMDBService {
-    private final RestTemplate restTemplate;
+public class OMDBService implements MovieSearchService{
+    private final RestOperations restTemplate;
     private final String apikey;
     private final String omdb = "http://www.omdbapi.com/?";
     private final ConversionService conversionService;
@@ -23,7 +23,7 @@ public class OMDBService {
 
 
     @Autowired
-    OMDBService(RestTemplate restTemplate, Properties properties, ConversionService conversionService, Logger logger) {
+    OMDBService(RestOperations restTemplate, Properties properties, ConversionService conversionService, Logger logger) {
         this.restTemplate = restTemplate;
         this.apikey = properties.getProperty("apikey");
         this.conversionService = conversionService;

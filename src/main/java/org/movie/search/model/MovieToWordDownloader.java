@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Component
-public class MovieToWordDownloader {
+public class MovieToWordDownloader implements Downloader {
     Properties properties;
 
     @Autowired

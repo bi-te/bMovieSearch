@@ -1,9 +1,9 @@
 package org.movie.search.controller;
 
 import org.apache.logging.log4j.Logger;
+import org.movie.search.model.Downloader;
 import org.movie.search.model.Movie;
-import org.movie.search.model.MovieToWordDownloader;
-import org.movie.search.services.OMDBService;
+import org.movie.search.services.MovieSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,14 +21,14 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 public class MovieSearchController {
-    private final OMDBService omdbService;
-    private final MovieToWordDownloader downloader;
+    private final MovieSearchService omdbService;
+    private final Downloader downloader;
     private final CacheManager cacheManager;
     private final Logger logger;
 
 
     @Autowired
-    public MovieSearchController(OMDBService omdbService, MovieToWordDownloader downloader,
+    public MovieSearchController(MovieSearchService omdbService, Downloader downloader,
                                  CacheManager cacheManager, Logger logger){
         this.omdbService = omdbService;
         this.downloader = downloader;
@@ -38,7 +38,7 @@ public class MovieSearchController {
 
     @GetMapping(value = "/movie_search", params = {"title"})
     public List<Movie> searchMovieTitle(@RequestParam(value = "title", required = false) String[] titles,
-                                        @RequestParam(value = "d", defaultValue = "false") boolean d) throws IOException {
+                                        @RequestParam(value = "d", defaultValue = "false") boolean d){
 
         List<Movie> movies = new LinkedList<>();
         List<CompletableFuture<Movie>> list = new LinkedList<>();

@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -54,7 +55,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
+    public RestOperations restTemplate() {
         return new RestTemplate();
     }
 
