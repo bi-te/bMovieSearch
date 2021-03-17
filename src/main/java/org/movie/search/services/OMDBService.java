@@ -41,8 +41,6 @@ public class OMDBService implements MovieSearchService{
         logger.info("Making request to OMDB -  " + title);
         JSONObject response = new JSONObject(restTemplate.getForObject(UriComponentsBuilder.fromUriString(omdb).queryParam("t", title)
         .queryParam("apikey", apikey).toUriString(), String.class));
-        System.out.println(UriComponentsBuilder.fromUriString(omdb).queryParam("t", title)
-                .queryParam("apikey", apikey).toUriString());
         Movie movie = conversionService.convert(response, Movie.class);
 
         return CompletableFuture.completedFuture(movie);
