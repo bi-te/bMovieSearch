@@ -11,6 +11,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,17 +20,19 @@ public class OMDBService implements MovieSearchService{
 
     private final String apikey;
     private final RestOperations restTemplate;
-    private final String omdb = "http://www.omdbapi.com/?";
+    private final String omdb;
     private final ConversionService conversionService;
-    Logger logger;
+    private final Logger logger;
 
 
     @Autowired
-    OMDBService(@Value("${apikey}") String apikey, RestOperations restTemplate, ConversionService conversionService) {
+    OMDBService(@Value("${apikey}") String apikey, RestOperations restTemplate, ConversionService conversionService,
+                @Value("${omdb}") String omdb) {
         this.apikey = apikey;
         this.restTemplate = restTemplate;
         this.conversionService = conversionService;
         this.logger = LogManager.getLogger(OMDBService.class);
+        this.omdb = omdb;
     }
 
     @Async
