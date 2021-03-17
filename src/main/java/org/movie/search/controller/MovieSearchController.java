@@ -1,5 +1,6 @@
 package org.movie.search.controller;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.movie.search.model.Downloader;
 import org.movie.search.model.Movie;
@@ -29,11 +30,11 @@ public class MovieSearchController {
 
     @Autowired
     public MovieSearchController(MovieSearchService omdbService, Downloader downloader,
-                                 CacheManager cacheManager, Logger logger){
+                                 CacheManager cacheManager){
         this.omdbService = omdbService;
         this.downloader = downloader;
         this.cacheManager = cacheManager;
-        this.logger = logger;
+        this.logger = LogManager.getLogger(MovieSearchController.class);
     }
 
     @GetMapping(value = "/movie_search", params = {"title"})

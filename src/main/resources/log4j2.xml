@@ -21,5 +21,11 @@
         <Root level="info">
             <AppenderRef ref="RollingFile"/>
         </Root>
+        <Logger name="org.movie.search.controller.MovieSearchController" level="info" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        <Logger name="org.movie.search.services.OMDBService" level="info" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
     </Loggers>
 </Configuration>

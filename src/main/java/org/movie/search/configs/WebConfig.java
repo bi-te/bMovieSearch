@@ -53,40 +53,5 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new JSONObjectToMovieConverter());
     }
-
-    @Bean
-    public RestOperations restTemplate() {
-        return new RestTemplate();
-    }
-
-    @Bean
-    public Properties properties() throws IOException {
-        Properties properties = new Properties();
-        File file = new ClassPathResource("application.properties").getFile();
-        try (InputStream in = new FileInputStream(file)) {
-            properties.load(in);
-        }
-        return properties;
-    }
-
-    @Bean
-    public Executor taskExecutor() throws IOException {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(Integer.parseInt(properties().getProperty("corePoolSize")));
-        executor.setMaxPoolSize(Integer.parseInt(properties().getProperty("maxPoolSize")));
-        executor.setQueueCapacity(Integer.parseInt(properties().getProperty("queueCapacity")));
-        executor.initialize();
-        return executor;
-    }
-
-    @Bean
-    public Logger logger(){
-        return LogManager.getLogger();
-    }
-
-    @Bean
-    public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager();
-    }
 }
 

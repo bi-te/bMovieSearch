@@ -1,33 +1,35 @@
 package org.movie.search.services;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.movie.search.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
-import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 @Service
 public class OMDBService implements MovieSearchService{
-    private final RestOperations restTemplate;
+
     private final String apikey;
+    private final RestOperations restTemplate;
     private final String omdb = "http://www.omdbapi.com/?";
     private final ConversionService conversionService;
-    private final Logger logger;
+    Logger logger;
 
 
     @Autowired
-    OMDBService(RestOperations restTemplate, Properties properties, ConversionService conversionService, Logger logger) {
+    OMDBService(@Value("${apikey}") String apikey, RestOperations restTemplate, ConversionService conversionService) {
+        this.apikey = apikey;
         this.restTemplate = restTemplate;
-        this.apikey = properties.getProperty("apikey");
         this.conversionService = conversionService;
-        this.logger = logger;
+        this.logger = LogManager.getLogger(OMDBService.class);
     }
 
     @Async
