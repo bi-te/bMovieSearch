@@ -45,6 +45,7 @@ public class MovieToWordDownloader implements Downloader {
         return "Title='" + movie.getTitle() + "' " +
                 "Year=" + movie.getYear() + "' " +
                 "Genre='" + movie.getGenre() + "' " +
-                "Plot='" + movie.getPlot() + "' ";
+                "Plot='" + movie.getPlot() + "' " +
+                "imdbId= " + movie.getId();
     }
 }

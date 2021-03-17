@@ -14,7 +14,8 @@ public class JSONObjectToMovieConverter implements Converter<JSONObject, Movie> 
             movie = new Movie(response.getString("Title"),
                     response.getInt("Year"),
                     response.getString("Genre"),
-                    response.getString("Plot"));
+                    response.getString("Plot"),
+                    response.getString("imdbID"));
         } else {
             movie = new Movie(response.getString("Error"));
         }

@@ -8,6 +8,7 @@ public class Movie {
     private int year;
     private String genre;
     private String plot;
+    private String id;
 
     public Movie() {
     }
@@ -19,11 +20,12 @@ public class Movie {
         this.plot = "N/A";
     }
 
-    public Movie(String title, int year, String genre, String plot) {
+    public Movie(String title, int year, String genre, String plot, String id) {
         this.title = title;
         this.year = year;
         this.genre = genre;
         this.plot = plot;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -56,6 +58,14 @@ public class Movie {
 
     public void setPlot(String plot) {
         this.plot = plot;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
