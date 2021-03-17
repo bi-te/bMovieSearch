@@ -39,8 +39,10 @@ public class OMDBService implements MovieSearchService{
     @Cacheable(value = "movies_title", key = "#title")
     public CompletableFuture<Movie> getMovieByTitle(String title, boolean d) {
         logger.info("Making request to OMDB -  " + title);
-        JSONObject response = new JSONObject(restTemplate.getForObject(omdb + "t=" + title +
-                "&apikey=" + apikey, String.class));
+        JSONObject response = new JSONObject(restTemplate.getForObject(UriComponentsBuilder.fromUriString(omdb).queryParam("t", title)
+        .queryParam("apikey", apikey).toUriString(), String.class));
+        System.out.println(UriComponentsBuilder.fromUriString(omdb).queryParam("t", title)
+                .queryParam("apikey", apikey).toUriString());
         Movie movie = conversionService.convert(response, Movie.class);
 
         return CompletableFuture.completedFuture(movie);
@@ -50,8 +52,8 @@ public class OMDBService implements MovieSearchService{
     @Cacheable(value = "movies_id", key = "#id")
     public CompletableFuture<Movie> getMovieById(String id, boolean d) {
         logger.info("Making request to OMDB -  " + id);
-        JSONObject response = new JSONObject(restTemplate.getForObject(omdb + "i=" + id +
-                "&apikey=" + apikey, String.class));
+        JSONObject response = new JSONObject(restTemplate.getForObject(UriComponentsBuilder.fromUriString(omdb).queryParam("i", id)
+                .queryParam("apikey", apikey).toUriString(), String.class));
         Movie movie = conversionService.convert(response, Movie.class);
         return CompletableFuture.completedFuture(movie);
     }
