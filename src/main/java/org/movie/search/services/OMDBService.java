@@ -3,6 +3,7 @@ package org.movie.search.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.movie.search.model.Downloader;
 import org.movie.search.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,45 +17,48 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class OMDBService implements MovieSearchService{
+public class OMDBService implements MovieSearchService {
 
     private final String apikey;
     private final RestOperations restTemplate;
     private final String omdb;
     private final ConversionService conversionService;
     private final Logger logger;
+    private final Downloader downloader;
 
 
     @Autowired
     OMDBService(@Value("${apikey}") String apikey, RestOperations restTemplate, ConversionService conversionService,
-                @Value("${omdb}") String omdb) {
+                @Value("${omdb}") String omdb, Downloader downloader) {
         this.apikey = apikey;
         this.restTemplate = restTemplate;
         this.conversionService = conversionService;
         this.logger = LogManager.getLogger(OMDBService.class);
         this.omdb = omdb;
+        this.downloader = downloader;
     }
 
+    @Override
     @Async
     @Cacheable(value = "movies_title", key = "#title")
-    public CompletableFuture<Movie> getMovieByTitle(String title, boolean d) {
+    public CompletableFuture<Movie> getMovieByTitle(String title) {
         logger.info("Making request to OMDB -  " + title);
         JSONObject response = new JSONObject(restTemplate.getForObject(UriComponentsBuilder.fromUriString(omdb).queryParam("t", title)
-        .queryParam("apikey", apikey).toUriString(), String.class));
+                .queryParam("apikey", apikey).toUriString(), String.class));
         Movie movie = conversionService.convert(response, Movie.class);
 
         return CompletableFuture.completedFuture(movie);
     }
 
+    @Override
     @Async
     @Cacheable(value = "movies_id", key = "#id")
-    public CompletableFuture<Movie> getMovieById(String id, boolean d) {
+    public CompletableFuture<Movie> getMovieById(String id) {
         logger.info("Making request to OMDB -  " + id);
         JSONObject response = new JSONObject(restTemplate.getForObject(UriComponentsBuilder.fromUriString(omdb).queryParam("i", id)
                 .queryParam("apikey", apikey).toUriString(), String.class));
         Movie movie = conversionService.convert(response, Movie.class);
         return CompletableFuture.completedFuture(movie);
     }
-
-
 }
+
