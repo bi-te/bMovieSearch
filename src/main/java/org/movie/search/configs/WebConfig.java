@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.movie.search.converters.JSONObjectToMovieConverter;
 
+import org.movie.search.converters.MovieToWordConverter;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -52,6 +53,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new JSONObjectToMovieConverter());
+        registry.addConverter(new MovieToWordConverter());
     }
 }
 

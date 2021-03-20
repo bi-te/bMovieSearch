@@ -3,37 +3,48 @@ package org.movie.search.model;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 @Component
 public class MovieToWordDownloader implements Downloader {
-    @Value("${downloadFolder}")
-    private String downloadFolder;
+    private final String template;
+    private final String downloadFolder;
+    private final ConversionService conversionService;
+
+    @Autowired
+    public MovieToWordDownloader(@Value("${template}") String template, @Value("${downloadFolder}") String downloadFolder,
+                                 ConversionService conversionService) {
+        this.template = template;
+        this.downloadFolder = downloadFolder;
+        this.conversionService = conversionService;
+    }
 
     public void download(List<Movie> movies) throws IOException {
         XWPFDocument document = new XWPFDocument();
-        movies.forEach(m -> {
-            XWPFParagraph movie = document.createParagraph();
-            XWPFRun run =  movie.createRun();
-            run.setText(movieToWord(m));
-            run.setFontSize(14);
-            run.setFontFamily("TimesNewRoman");
-        });
+
+        for (Movie m: movies){
+            XWPFDocument movie = conversionService.convert(m, XWPFDocument.class);
+            movie.getParagraphs().forEach(xwpfParagraph ->
+                    document.createParagraph().createRun().setText(xwpfParagraph.getText()));
+            movie.close();
+            document.createParagraph();
+        }
+
 
         File word;
-        if(downloadFolder.equals("default")){
+        if (downloadFolder.equals("default")) {
             word = new File(System.getProperty("user.home") + "/Downloads/" + "MovieSearch.docx");
         } else {
             word = new File(downloadFolder + "MovieSearch.docx");
         }
-        try (OutputStream outputStream = new FileOutputStream(word)){
+        try (OutputStream outputStream = new FileOutputStream(word)) {
             document.write(outputStream);
         }
 
@@ -41,7 +52,7 @@ public class MovieToWordDownloader implements Downloader {
 
     }
 
-    private String movieToWord(Movie movie){
+    private String movieToWord(Movie movie) {
         return "Title='" + movie.getTitle() + "' " +
                 "Year=" + movie.getYear() + "' " +
                 "Genre='" + movie.getGenre() + "' " +

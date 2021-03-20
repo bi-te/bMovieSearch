@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Movie {
     private String title;
-    private int year;
+    private String year;
     private String genre;
     private String plot;
     private String id;
@@ -15,12 +15,12 @@ public class Movie {
 
     public Movie(String title){
         this.title = title;
-        this.year = 0;
+        this.year = "0";
         this.genre="N/A";
         this.plot = "N/A";
     }
 
-    public Movie(String title, int year, String genre, String plot, String id) {
+    public Movie(String title, String year, String genre, String plot, String id) {
         this.title = title;
         this.year = year;
         this.genre = genre;
@@ -36,11 +36,11 @@ public class Movie {
         this.title = title;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
