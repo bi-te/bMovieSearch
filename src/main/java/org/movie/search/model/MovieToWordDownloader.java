@@ -6,29 +6,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 @Component
 public class MovieToWordDownloader implements Downloader {
-    private final String template;
     private final String downloadFolder;
     private final ConversionService conversionService;
 
     @Autowired
-    public MovieToWordDownloader(@Value("${template}") String template, @Value("${downloadFolder}") String downloadFolder,
+    public MovieToWordDownloader(@Value("${downloadFolder}") String downloadFolder,
                                  ConversionService conversionService) {
-        this.template = template;
         this.downloadFolder = downloadFolder;
         this.conversionService = conversionService;
     }
 
-    public void download(List<Movie> movies) throws IOException {
+    public XWPFDocument moviesToDownload(List<Movie> movies) throws IOException  {
         XWPFDocument document = new XWPFDocument();
-
         for (Movie m: movies){
             XWPFDocument movie = conversionService.convert(m, XWPFDocument.class);
             movie.getParagraphs().forEach(xwpfParagraph ->
@@ -37,19 +31,7 @@ public class MovieToWordDownloader implements Downloader {
             document.createParagraph();
         }
 
-
-        File word;
-        if (downloadFolder.equals("default")) {
-            word = new File(System.getProperty("user.home") + "/Downloads/" + "MovieSearch.docx");
-        } else {
-            word = new File(downloadFolder + "MovieSearch.docx");
-        }
-        try (OutputStream outputStream = new FileOutputStream(word)) {
-            document.write(outputStream);
-        }
-
-        document.close();
-
+        return document;
     }
 
     private String movieToWord(Movie movie) {

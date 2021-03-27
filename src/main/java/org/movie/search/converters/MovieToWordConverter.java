@@ -15,15 +15,15 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class MovieToWordConverter implements Converter<Movie, XWPFDocument> {
-    private String template = "MovieSearchTemplate.docx";
-    private Map<String, Function<Movie, String>> map = Map.of(
+    private final String template = "MovieSearchTemplate.docx";
+    private final Map<String, Function<Movie, String>> map = Map.of(
             "$TITLE$", (Movie::getTitle),
             "$YEAR$", (Movie::getYear),
             "$GENRE$", (Movie::getGenre),
             "$PLOT$", (Movie::getPlot),
             "$IMDBID$", (Movie::getId)
     );
-    private List<String> list = List.of("$TITLE$", "$YEAR$", "$GENRE$", "$PLOT$", "$IMDBID$");
+    private final List<String> list = List.of("$TITLE$", "$YEAR$", "$GENRE$", "$PLOT$", "$IMDBID$");
 
     @Override
     public XWPFDocument convert(Movie movie) {
@@ -39,6 +39,7 @@ public class MovieToWordConverter implements Converter<Movie, XWPFDocument> {
             }
             return template;
         } catch (IOException e) {
+
             XWPFDocument document = new XWPFDocument();
             XWPFParagraph paragraph = document.createParagraph();
             XWPFRun run =  paragraph.createRun();

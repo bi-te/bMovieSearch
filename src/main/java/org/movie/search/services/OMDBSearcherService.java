@@ -7,7 +7,6 @@ import org.movie.search.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -27,7 +26,7 @@ public class OMDBSearcherService implements MoviesSearcherService {
     }
 
     @Override
-    public List<Movie> getMoviesByTitle(String[] titles, boolean d) {
+    public List<Movie> getMoviesByTitle(String[] titles) {
         List<Movie> movies = new LinkedList<>();
         List<CompletableFuture<Movie>> list = new LinkedList<>();
 
@@ -35,11 +34,11 @@ public class OMDBSearcherService implements MoviesSearcherService {
             list.add(omdbService.getMovieByTitle(title));
         }
 
-        return getMovies(d, movies, list);
+        return getMovies(movies, list);
     }
 
     @Override
-    public List<Movie> getMoviesById(String[] ids, boolean d) {
+    public List<Movie> getMoviesById(String[] ids) {
         List<Movie> movies = new LinkedList<>();
         List<CompletableFuture<Movie>> list = new LinkedList<>();
 
@@ -47,10 +46,10 @@ public class OMDBSearcherService implements MoviesSearcherService {
             list.add(omdbService.getMovieById(id));
         }
 
-        return getMovies(d, movies, list);
+        return getMovies(movies, list);
     }
 
-    private List<Movie> getMovies(boolean d, List<Movie> movies, List<CompletableFuture<Movie>> list) {
+    private List<Movie> getMovies(List<Movie> movies, List<CompletableFuture<Movie>> list) {
         list.forEach(m -> {
             try {
                 movies.add(m.get());
@@ -59,19 +58,7 @@ public class OMDBSearcherService implements MoviesSearcherService {
             }
         });
 
-        if(d){
-            downloadMovies(movies);
-        }
-
         return movies;
     }
 
-    private void downloadMovies(List<Movie> movies) {
-        try {
-            logger.info("downloading file...");
-            downloader.download(movies);
-        } catch (IOException e) {
-            logger.error("Error occurred while downloading result --- ", e);
-        }
-    }
 }

@@ -1,8 +1,10 @@
 package org.movie.search.model;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
 import java.io.IOException;
 import java.util.List;
 
 public interface Downloader {
-    void download(List<Movie> movies) throws IOException;
+    XWPFDocument moviesToDownload(List<Movie> movies) throws IOException;
 }
